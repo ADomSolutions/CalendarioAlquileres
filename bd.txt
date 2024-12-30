@@ -1,0 +1,12 @@
+CREATE DATABASE reservas;
+
+USE reservas;
+
+CREATE TABLE reservas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_propiedad VARCHAR(70) NOT NULL,
+    link VARCHAR(200) NOT NULL,	
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    color VARCHAR(7) NOT NULL	
+);

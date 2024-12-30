@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <!-- DOMENICO ALEJANDRO-RESERVAS DE ALQUILERES -->
+  <title>Calendario de Reservas de Propiedades para Alquiler</title>
+  <style>  
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+      color: #333;
+    }
+
+    #calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .day {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      min-height: 80px;
+      position: relative;
+      background-color: #fefefe;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .day:hover {
+      background-color: #f1f1f1;
+    }
+
+    .mark-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      margin-top: 5px;
+      justify-content: center;
+    }
+
+    .mark {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+    }
+
+    #month-navigation {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    #month-navigation button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #month-navigation button:hover {
+      background-color: #0056b3;
+    }
+
+    #currentMonth {
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #333;
+    }
+
+    #property-form, #references {
+      margin-top: 20px;
+      text-align: center;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 600px;
+    }
+
+    #property-form h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    #property-form form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    #property-form label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    #property-form input {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    #property-form button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #property-form button:hover {
+      background-color: #218838;
+    }
+
+    #references h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+   #references ul {
+    list-style: none;
+    padding: 0;
+    text-align: left; /* Asegura que el texto quede alineado a la izquierda */
+	}
+
+
+    #references li {
+      margin: 5px 0;
+    }
+
+    #references a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    #references a:hover {
+      color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calendario de Reservas</h1>
+
+  <!-- Navegación de meses -->
+  <div id="month-navigation">
+    <button id="prevMonth">Mes Anterior</button>
+    <span id="currentMonth"></span>
+    <button id="nextMonth">Mes Siguiente</button>
+  </div>
+
+  <!-- Calendario -->
+  <div id="calendar"></div>
+
+  <!-- Formulario para agregar propiedad -->
+  <div id="property-form">
+    <h2>Agregar Propiedad</h2>
+    <form id="addPropertyForm">
+      <label for="propertyName">Nombre de la propiedad:</label>
+      <input type="text" id="propertyName" required />
+
+      <label for="propertyLink">Enlace a la propiedad:</label>
+      <input type="url" id="propertyLink" required />
+
+      <label for="startDate">Fecha de inicio:</label>
+      <input type="date" id="startDate" required />
+
+      <label for="endDate">Fecha de fin:</label>
+      <input type="date" id="endDate" required />
+
+      <button type="submit">Agregar Reserva</button>
+    </form>
+  </div>
+
+  <!-- Referencias de colores -->
+  <div id="references">
+    <h3>Referencias</h3>
+    <ul id="colorReferences"></ul>
+  </div>
+  <script>   
+   	const colors = [
+  "#FF5733", "#33FF57", "#3357FF", "#FF33A6", "#FFD733", "#00CED1", "#8A2BE2", "#7FFF00", "#DC143C", "#FF8C00", "#20B2AA",
+  "#E6E6FA", "#FFF0F5", "#FAEBD7", "#7FFFD4", "#FFE4C4", "#00008B", "#8B008B", "#556B2F", "#FF8C00", "#9932CC", "#8B0000",
+  "#E9967A", "#8FBC8F", "#483D8B", "#2F4F4F", "#00CED1", "#9400D3", "#FF1493", "#00BFFF", "#696969", "#1E90FF", "#B22222",
+  "#FFFAF0", "#228B22", "#FF00FF", "#DCDCDC", "#F8F8FF", "#FFD700", "#DAA520", "#ADFF2F", "#808080", "#F0FFF0", "#FF69B4",
+  "#CD5C5C", "#4B0082", "#FFFFF0", "#F0E68C", "#E6E6FA", "#FFF0F5", "#7CFC00", "#FFFACD", "#ADD8E6", "#F08080", "#E0FFFF",
+  "#FAFAD2", "#D3D3D3", "#90EE90", "#FFB6C1", "#FFA07A", "#20B2AA", "#87CEFA", "#778899", "#B0C4DE", "#FFFFE0", "#00FF00",
+  "#32CD32", "#FAF0E6", "#FF00FF", "#800000", "#66CDAA", "#0000CD", "#BA55D3", "#9370DB", "#3CB371", "#7B68EE", "#00FA9A",
+  "#48D1CC", "#C71585", "#191970", "#FFE4E1", "#FFE4B5", "#FFDEAD", "#000080", "#FDF5E6", "#808000", "#6B8E23", "#FFA500",
+  "#FF4500", "#DA70D6", "#EEE8AA", "#98FB98", "#AFEEEE", "#DB7093", "#FFEFD5", "#FFDAB9", "#CD853F", "#FFC0CB", "#DDA0DD",
+  "#B0E0E6", "#800080", "#663399", "#FF0000", "#BC8F8F", "#4169E1", "#8B4513", "#FA8072", "#FAA460", "#2E8B57", "#FFF5EE",
+  "#A0522D", "#C0C0C0", "#87CEEB", "#6A5ACD", "#708090", "#FFFAFA", "#00FF7F", "#4682B4", "#D2B48C", "#008080", "#D8BFD8",
+  "#FF6347", "#40E0D0", "#EE82EE", "#F5DEB3", "#FFFFFF", "#F5F5F5", "#FFFF00", "#9ACD32", "#1ABC9C", "#2ECC71", "#3498DB",
+  "#9B59B6", "#34495E", "#16A085", "#27AE60", "#2980B9", "#8E44AD", "#2C3E50", "#F1C40F", "#E67E22", "#E74C3C", "#ECF0F1",
+  "#95A5A6", "#DDDDDD", "#7F8C8D", "#8B4513", "#BDB76B", "#556B2F", "#708090", "#6B8E23", "#CD5C5C", "#F08080", "#FFA07A",
+  "#FF7F50", "#FF6347", "#FF4500", "#DC143C", "#B22222", "#8B0000", "#800000", "#A52A2A", "#DEB887", "#D2B48C", "#BC8F8F",
+  "#F4A460", "#DAA520", "#B8860B", "#8B4513", "#A0522D", "#CD853F", "#D2691E", "#A52A2A", "#808000", "#BDB76B", "#556B2F",
+  "#6B8E23", "#9ACD32", "#32CD32", "#00FF00", "#228B22", "#008000", "#006400", "#ADFF2F", "#7FFF00", "#7CFC00", "#00FA9A",
+  "#00FF7F", "#98FB98", "#90EE90", "#8FBC8F", "#3CB371", "#2E8B57", "#228B22", "#006400", "#8B0000", "#800000", "#A52A2A",
+  "#B22222", "#DC143C", "#FF0000", "#FF4500", "#FF6347", "#FF7F50", "#FFA07A", "#FA8072", "#E9967A", "#F08080", "#CD5C5C",
+  "#D2691E", "#A0522D", "#8B4513", "#A52A2A", "#B22222", "#FF0000", "#FF4500", "#FF6347", "#FF7F50", "#FFA07A", "#FA8072"
+];
+	
+    let reservations = [];
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+
+    const calendar = document.getElementById("calendar");
+    const currentMonthLabel = document.getElementById("currentMonth");
+
+    function fetchReservations() {
+      fetch('server.php?action=get')
+        .then(response => response.json())
+        .then(data => {
+          reservations = data;
+          renderCalendar(currentMonth, currentYear);
+          updateReferences();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function renderCalendar(month, year) {
+      calendar.innerHTML = "";
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      currentMonthLabel.textContent = `${new Date(year, month).toLocaleString('es', { month: 'long' })} ${year}`;
+
+      for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement("div");
+        calendar.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        const cell = document.createElement("div");
+        cell.classList.add("day");
+        cell.textContent = day;
+
+        const dayReservations = reservations.filter(r => r.fecha_inicio <= date && r.fecha_fin >= date);
+
+        if (dayReservations.length > 0) {
+          const markContainer = document.createElement("div");
+          markContainer.classList.add("mark-container");
+
+          dayReservations.forEach(reservation => {
+            const mark = document.createElement("div");
+            mark.classList.add("mark");
+            mark.style.backgroundColor = reservation.color;
+            mark.title = reservation.nombre_propiedad;
+            markContainer.appendChild(mark);
+          });
+
+          cell.appendChild(markContainer);
+        }
+
+        calendar.appendChild(cell);
+      }
+    }
+
+    function addReservation(event) {
+      event.preventDefault();
+      const propertyName = document.getElementById("propertyName").value;
+      const propertyLink = document.getElementById("propertyLink").value;
+      const startDate = document.getElementById("startDate").value;
+      const endDate = document.getElementById("endDate").value;
+      const color = colors[reservations.length % colors.length];
+
+      const reservation = {
+        nombre_propiedad: propertyName,
+        link: propertyLink,
+        fecha_inicio: startDate,
+        fecha_fin: endDate,
+        color: color,
+      };
+
+      fetch("server.php?action=add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reservation),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            fetchReservations();
+            document.getElementById("addPropertyForm").reset();
+          } else {
+            alert("Error al guardar la reserva.");
+          }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+
+    function updateReferences() {
+      const referenceList = document.getElementById("colorReferences");
+      referenceList.innerHTML = "";
+      reservations.forEach(reservation => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `<span style="background-color: ${reservation.color}; width: 20px; height: 20px; display: inline-block; margin-right: 10px;"></span>
+                              <a href="${reservation.link}" target="_blank">${reservation.nombre_propiedad}</a>`;
+        referenceList.appendChild(listItem);
+      });
+    }
+
+    document.getElementById("addPropertyForm").addEventListener("submit", addReservation);
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar(currentMonth, currentYear);
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar(currentMonth, currentYear);
+    });
+
+    fetchReservations();
+  </script>
+</body>
+</html>
