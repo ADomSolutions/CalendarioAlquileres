@@ -7,8 +7,9 @@
 
 Este proyecto es una aplicación web simple para **gestionar reservas de propiedades**.  
 Permite visualizar las reservas en un calendario mensual, agregar nuevas propiedades y ver las referencias de cada una con colores únicos.
-En este momento parte de este código está aplicado a la web turística de Balneario Orense, Punta Desnudez
-👉 **[Ver demo en vivo registrandose como dueño de una casa/departamento](https://www.orensepuntadesnudez.com.ar/)**
+En este momento parte de este código está aplicado a la web turística de Balneario Orense, Punta Desnudez.
+
+👉 **[Ver demo registrandose como dueño de una casa/departamento](https://www.orensepuntadesnudez.com.ar/)**
 
 ## Estructura del proyecto
 
@@ -59,3 +60,7 @@ Navegar entre meses con los botones Mes Anterior / Mes Siguiente.
 Usar el formulario para agregar reservas.
 
 Consultar las referencias en la parte inferior para acceder a cada propiedad.
+
+## 📸 Capturas
+<img width="1053" height="566" alt="image" src="https://github.com/user-attachments/assets/3c4d401a-b76c-4363-9af4-86dfc2d7ec8e" />
+
