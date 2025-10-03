@@ -1,7 +1,14 @@
 # Sistema de Gestión de Reservas DOMENICO ALEJANDRO
 
+[![HTML5](https://img.shields.io/badge/HTML5-orange?logo=html5&logoColor=white)](https://developer.mozilla.org/es/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-blue?logo=css3&logoColor=white)](https://developer.mozilla.org/es/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-yellow?logo=javascript&logoColor=black)](https://developer.mozilla.org/es/docs/Web/JavaScript)
+[![Status](https://img.shields.io/badge/Status-En%20Desarrollo-green)]()
+
 Este proyecto es una aplicación web simple para **gestionar reservas de propiedades**.  
 Permite visualizar las reservas en un calendario mensual, agregar nuevas propiedades y ver las referencias de cada una con colores únicos.
+En este momento parte de este código está aplicado a la web turística de Balneario Orense, Punta Desnudez
+👉 **[Ver demo en vivo registrandose como dueño de una casa/departamento](https://www.orensepuntadesnudez.com.ar/)**
 
 ## Estructura del proyecto
 
